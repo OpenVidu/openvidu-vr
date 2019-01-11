@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>openvidu-vr-hello-world</title>
+        <link rel="shortcut icon" href="resources/images/favicon.ico" type="image/x-icon">
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+        <style>
+            body {
+                overflow: hidden;
+                margin: 0px;
+            }
+        </style>
+        <script type="module" src="app.js"></script>
+        <script src="openvidu-browser-2.7.0.js"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script src="resources/js/three.js"></script>
+        <script src="resources/js/WebGL.js"></script>
+        <script src="resources/js/OrbitControls.js"></script>
+        <script src="resources/js/Cloth.js"></script>
+    </head>
+    <body>
+        <div id="container"></div>
+        <video id="video" style="display:none"></video>
+
+        <script type="module">
+            import { joinSession } from './app.js';
+            joinSession();
+        </script>
+    </body>
+</html>
