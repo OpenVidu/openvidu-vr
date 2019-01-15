@@ -3,7 +3,7 @@
 OpenVidu team has started to inlcude **openvidu** in the world of virtual reality.
 
 
-The technologies used to develop these applications will be **WebGL**, **Three.js** and **JavasCript**.
+The technologies used to develop these applications will be **WebGL**, **Three.js** and **JavaScript**.
 
 ### WebGL
 
