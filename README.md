@@ -78,4 +78,4 @@ First of all, to get an 3D object, we have to take account a few steps:
 3) **Animate the object**: This will be run every frame (normally 60 times per second). Basically, anything you want to move or change while the app is running has to go through the animate loop. You can of course call other functions from there, so that you don't end up with a animate function that's hundreds of lines.
 
 
-Finally, OpenVidu comes on stage. We start from [openvidu-hello-world tutorial](https://github.com/OpenVidu/openvidu-tutorials/tree/master/openvidu-hello-world), we initialize a publisher and we use the *ov-video* generated to assign that video like our object texture (*step 2*). This is how we integrate openvidu with a virtual reality environment.
+Finally, OpenVidu comes on stage. We start from [openvidu-hello-world tutorial](https://github.com/OpenVidu/openvidu-tutorials/tree/master/openvidu-hello-world), we initialize a publisher and we use the *ov-video* generated to assign that video like our object texture (*step 1.2*). This is how we integrate openvidu with a virtual reality environment.
