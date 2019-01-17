@@ -68,7 +68,7 @@ function init() {
     });
 
     // ground
-    var groundTexture = loader.load('textures/grasslight-big.jpg');
+    var groundTexture = loader.load('resources/textures/grasslight-big.jpg');
     groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
     groundTexture.repeat.set(25, 25);
     groundTexture.anisotropy = 16;
