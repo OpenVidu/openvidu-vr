@@ -1,4 +1,3 @@
-import { init, animate } from './clothes.js';
 
 var OV;
 var session;
@@ -110,4 +109,6 @@ function createToken(sessionId) {
         });
     });
 }
-export { joinSession };
+window.onload = function() {
+    joinSession();
+}
