@@ -1,5 +1,3 @@
-import { init, animate } from './resources/js/first_person.js';
-
 var OV;
 var session;
 
@@ -113,4 +111,4 @@ function createToken(sessionId) {
 
 window.onload = function() {
     joinSession();
-  }
+};
