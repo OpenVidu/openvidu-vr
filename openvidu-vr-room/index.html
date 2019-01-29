@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>OpenVidu VR Room</title>
+        <meta charset="utf-8" />
+        <link rel="shortcut icon" href="resources/img/favicon.ico" type="image/x-icon" />
+        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+        <link href="http://fonts.googleapis.com/css?family=Strait" rel="stylesheet" type="text/css" />
+        <link href="resources/css/style.css" rel="stylesheet" type="text/css" />
+
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" type="text/javascript"></script>
+
+        <script src="resources/lib/three.js" type="text/javascript"></script>
+
+        <script src="resources/lib/OculusBridge.min.js" type="text/javascript"></script>
+
+        <script src="resources/lib/OrbitControls.js" type="text/javascript"></script>
+        <script src="resources/lib/RiftCamera.js" type="text/javascript"></script>
+
+        <script src="resources/lib/openvidu-browser-2.7.0.js" type="text/javascript"></script>
+        <script src="resources/js/first_person.js" type="text/javascript"></script>
+        <script src="app.js" type="text/javascript"></script>
+    </head>
+
+    <body>
+        <div id="join">
+            <div id="teacherJoin"><input type="button" value="TEACHER" onclick="initApp('PUBLISHER')" /></div>
+            <div id="studentJoin"><input type="button" value="STUDENT" onclick="initApp('SUBSCRIBER')" /></div>
+        </div>
+
+        <a id="logo" class="offline" href="https://github.com/Instrument/oculus-bridge"></a>
+        <div id="info" style="display: none;">
+            <div class="button" id="toggle-render">toggle render mode</div>
+            <div class="button" id="help">help</div>
+            <div class="button" id="exit" onclick="leaveSession()">Exit</div>
+            <div id="help-text" style="display:none;">
+                <h1>Controls - stereo mode:</h1>
+                <section>
+                    <div><label>forward:</label>W or UP</div>
+                    <div><label>backward:</label>S or DOWN</div>
+                </section>
+
+                <section>
+                    <div><label>straif left:</label>A or LEFT</div>
+                    <div><label>straif right:</label>D or RIGHT</div>
+                </section>
+
+                <section>
+                    <div><label>turn left:</label>Q</div>
+                    <div><label>turn right:</label>E</div>
+                </section>
+
+                <section>
+                    <div><label>jump:</label>SPACE</div>
+                </section>
+
+                <h1>Controls - perspective mode:</h1>
+                <section>
+                    <div><label>orbit:</label>left-click + drag</div>
+                    <div><label>pan:</label>right-click + drag</div>
+                    <div><label>zoom:</label>mouse wheel</div>
+                </section>
+            </div>
+        </div>
+
+        <div id="viewport"></div>
+        <div id="security_error">
+            <p>This file must be served via HTTP to support the use of textures.</p>
+            <p>Please host this content via a web server of some kind and try again.</p>
+        </div>
+        <div id="generic_error">
+            <p>Oh dang, something went wrong while trying to render the scene.</p>
+            <p>Exception: <span id="exception_message"></span></p>
+        </div>
+
+        <video id="video" autoplay loop crossOrigin="anonymous" webkit-playsinline style="display:none"></video>
+        <video id="videoScreenShare" autoplay loop crossOrigin="anonymous" webkit-playsinline style="display:none"></video>
+    </body>
+</html>
