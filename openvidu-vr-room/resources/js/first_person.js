@@ -12,6 +12,8 @@ var clock;
 var useRift = false;
 var riftCam;
 
+var modelLoader;
+
 var studentBoxes = [];
 var teacherBoxes = [];
 var heightBoxVideo = 150;
@@ -105,48 +107,64 @@ function initGeometry() {
     }
 }
 
-function generatePositionNumber(max, min, range){
+function generatePositionNumber(max, min, range) {
     var number = Math.random() * (max - min) + min;
-    if(number > -range && number < range){
+    if (number > -range && number < range) {
         number = generatePositionNumber(max, min, range);
     }
-    console.log(number)
     return number;
 }
 
-
 function createStudentBox() {
     // add some boxes.
-    var loader = new THREE.TextureLoader();
-    var boxTexture = loader.load('resources/textures/blue_blue.jpg');
+    //var loader = new THREE.TextureLoader();
+    //var boxTexture = loader.load('resources/textures/blue_blue.jpg');
 
-    var material = new THREE.MeshLambertMaterial({ emissive: 0x505050, map: boxTexture, color: 0x9b9b9b });
+    //var material = new THREE.MeshLambertMaterial({ emissive: 0x505050, map: boxTexture, color: 0x9b9b9b });
 
     var height = Math.random() * 150 + 10;
     var width = 20;
 
-    var x = generatePositionNumber(-studentBoxLimite,studentBoxLimite, widthBoxVideo);//Math.random() * (studentBoxLimite - widthBoxVideo) + widthBoxVideo;
+    var x = generatePositionNumber(-studentBoxLimite, studentBoxLimite, widthBoxVideo); //Math.random() * (studentBoxLimite - widthBoxVideo) + widthBoxVideo;
     var y = height / 2;
     var z = Math.random() * (-400 - 400) + 400;
+    console.log(z);
 
-
-    var box = new THREE.Mesh(new THREE.CubeGeometry(width, height, width), material);
+    /*var box = new THREE.Mesh(new THREE.CubeGeometry(width, height, width), material);
     box.position.set(x, y, z);
     box.rotation.set(0, Math.random() * Math.PI * 2, 0);
 
     studentBoxes.push(box);
-    scene.add(box);
+    scene.add(box);*/
+
+    modelLoader.load('resources/models/Sitting.fbx', function(object) {
+        mixer = new THREE.AnimationMixer(object);
+        var action = mixer.clipAction(object.animations[0]);
+        action.play();
+        object.position.set(x, 0, z);
+        var random = x > widthBoxVideo ? 0.7079608503944332 : 0.25;
+        object.rotation.set(0, random * Math.PI * 2, 0);
+        object.height = 2000;
+        object.traverse(function(child) {
+            if (child.isMesh) {
+                child.castShadow = true;
+                child.receiveShadow = true;
+            }
+        });
+        studentBoxes.push(object);
+        scene.add(object);
+    });
 }
 
-function removeStudentBox(){
-    if(studentBoxes.length > 0){
-        scene.remove(studentBoxes[studentBoxes.length-1]);
+function removeStudentBox() {
+    if (studentBoxes.length > 0) {
+        scene.remove(studentBoxes[studentBoxes.length - 1]);
         studentBoxes.pop();
     }
 }
 
 function createTeacherBox() {
-    console.log("CREATING TEACHER OBJECT");
+    console.log('CREATING TEACHER OBJECT');
     var videoTexture = new THREE.VideoTexture(video);
     var material = new THREE.MeshLambertMaterial({
         map: videoTexture,
@@ -158,10 +176,10 @@ function createTeacherBox() {
     box.position.set(0, heightBoxVideo / 2, widthBoxVideo / 1.9);
 
     teacherBoxes.push(box);
-    scene.add(box);    
+    scene.add(box);
 }
 
-function createScreenBox(){
+function createScreenBox() {
     var videoScreenShareTexture = new THREE.VideoTexture(videoScreenShare);
     var material2 = new THREE.MeshLambertMaterial({
         map: videoScreenShareTexture,
@@ -173,15 +191,13 @@ function createScreenBox(){
 
     teacherBoxes.push(box2);
     scene.add(box2);
-
 }
 
-function removeTeacherBox(){
+function removeTeacherBox() {
     teacherBoxes.forEach((box) => {
         scene.remove(box);
     });
     teacherBoxes = [];
-
 }
 
 function init(role) {
@@ -200,6 +216,8 @@ function init(role) {
         el.style.display = el.style.display == 'none' ? '' : 'none';
     });
 
+    modelLoader = new THREE.FBXLoader();
+
     window.addEventListener('resize', onResize, false);
     video = document.getElementById('video');
     videoScreenShare = document.getElementById('videoScreenShare');
@@ -212,23 +230,23 @@ function init(role) {
     initScene();
     initGeometry();
     initLights();
-    if(role === 'PUBLISHER'){
+
+    if (role === 'PUBLISHER') {
         createTeacherBox();
         createScreenBox();
     }
 
     oculusBridge = new OculusBridge({
-        debug: true,
+        debug: false,
         onOrientationUpdate: bridgeOrientationUpdated,
         onConfigUpdate: bridgeConfigUpdated,
         onConnect: bridgeConnected,
         onDisconnect: bridgeDisconnected,
     });
-    oculusBridge.connect();
+    //oculusBridge.connect();
 
     riftCam = new THREE.StereoEffect(renderer);
     riftCam.setEyeSeparation(-1.8);
-
 }
 
 function onResize() {
@@ -266,6 +284,7 @@ function bridgeOrientationUpdated(quatValues) {
     quat.setFromAxisAngle(bodyAxis, bodyAngle);
 
     // make a quaternion for the current orientation of the Rift
+    console.log("ASASA",quatValues);
     var quatCam = new THREE.Quaternion(quatValues.x, quatValues.y, quatValues.z, quatValues.w);
 
     // multiply the body rotation by the Rift rotation.
@@ -369,14 +388,14 @@ function updateInput(delta) {
 
     // update the camera position when rendering to the oculus rift.
     if (useRift) {
-        camera.position.set(bodyPosition.x, bodyPosition.y, bodyPosition.z);
+        camera.position.set(bodyPosition.x, 150, bodyPosition.z);
     }
 }
 
 function animate() {
     var delta = clock.getDelta();
 
-   // if (mixer) mixer.update(delta);
+    if (mixer) mixer.update(delta);
 
     updateInput(delta);
     for (var i = 0; i < core.length; i++) {
