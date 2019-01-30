@@ -10,7 +10,6 @@ var controls;
 var clock;
 
 var useRift = false;
-
 var riftCam;
 
 var studentBoxes = [];
@@ -219,7 +218,7 @@ function init(role) {
     }
 
     oculusBridge = new OculusBridge({
-        debug: false,
+        debug: true,
         onOrientationUpdate: bridgeOrientationUpdated,
         onConfigUpdate: bridgeConfigUpdated,
         onConnect: bridgeConnected,
@@ -227,7 +226,9 @@ function init(role) {
     });
     oculusBridge.connect();
 
-    riftCam = new THREE.OculusRiftEffect(renderer);
+    riftCam = new THREE.StereoEffect(renderer);
+    riftCam.setEyeSeparation(-1.8);
+
 }
 
 function onResize() {
@@ -252,7 +253,7 @@ function bridgeDisconnected() {
 
 function bridgeConfigUpdated(config) {
     console.log('Oculus config updated.');
-    riftCam.setHMD(config);
+    //riftCam.setHMD(config);
 }
 
 function bridgeOrientationUpdated(quatValues) {
