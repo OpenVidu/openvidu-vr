@@ -103,6 +103,7 @@ function subscribeToStreamCreated(){
         session.subscribe(event.stream, 'subscriber');
         setTimeout(() => {
             var videoId = event.stream.typeOfVideo === 'SCREEN' ? 'videoScreenShare' : 'video'
+            connections.push({role: PUBLISHER, connectionId: event.stream.connection.connectionId});
             var video = document.getElementById(videoId);
             video.srcObject = event.stream.mediaStream;
             console.log(videoId);

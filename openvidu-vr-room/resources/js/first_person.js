@@ -16,9 +16,9 @@ var modelLoader;
 
 var studentBoxes = [];
 var teacherBoxes = [];
-var heightBoxVideo = 150;
-var widthBoxVideo = 180;
-var studentBoxLimite = 400;
+var heightBoxVideo = 300;
+var widthBoxVideo = 380;
+var studentBoxLimite = 500;
 var core = [];
 var dataPackets = [];
 
@@ -53,7 +53,7 @@ function initScene() {
 
     // Initialize the renderer
     renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setClearColor(0xdffffff);
+    renderer.setClearColor(0x1c1f2d);
     renderer.setSize(window.innerWidth, window.innerHeight);
 
     element = document.getElementById('viewport');
@@ -72,25 +72,24 @@ function initGeometry() {
     var floorLoader = new THREE.TextureLoader();
     floorTexture = floorLoader.load('resources/textures/wood.jpg');
     floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
-    floorTexture.repeat.set(5, 5);
+    floorTexture.repeat.set(20, 20);
     floorTexture.anisotropy = 32;
 
     var floorMaterial = new THREE.MeshBasicMaterial({ map: floorTexture });
-    var floorGeometry = new THREE.PlaneGeometry(900, 900, 10, 10);
+    var floorGeometry = new THREE.PlaneGeometry(1500, 1500, 10, 10);
     var floor = new THREE.Mesh(floorGeometry, floorMaterial);
     floor.rotation.x = -Math.PI / 2;
 
     scene.add(floor);
 
-    for (var i = 0; i < 100; i++) {
-        var material = new THREE.MeshLambertMaterial({ color: 0x000000 });
+    for (var i = 0; i < 500; i++) {
+        var material = new THREE.MeshLambertMaterial({ color: 0xffffff });
 
         var size = Math.random() * 15 + 3;
 
         var box = new THREE.Mesh(new THREE.CubeGeometry(size, size * 0.1, size * 0.1), material);
 
-        box.position.set(Math.random() * 1000 - 500, Math.random() * 1000 + 80, Math.random() * 1000 - 500);
-
+        box.position.set(Math.random() * 1000 - 500, Math.random() * 1000 + 500 ,Math.random() * 1000 - 500);
         var speedVector;
         if (Math.random() > 0.5) {
             speedVector = new THREE.Vector3(0, 0, Math.random() * 1.5 + 0.5);
@@ -109,9 +108,9 @@ function initGeometry() {
 
 function generatePositionNumber(max, min, range) {
     var number = Math.random() * (max - min) + min;
-    if (number > -range && number < range) {
+    /*if (number > -range && number < range) {
         number = generatePositionNumber(max, min, range);
-    }
+    }*/
     return number;
 }
 
@@ -127,8 +126,7 @@ function createStudentBox() {
 
     var x = generatePositionNumber(-studentBoxLimite, studentBoxLimite, widthBoxVideo); //Math.random() * (studentBoxLimite - widthBoxVideo) + widthBoxVideo;
     var y = height / 2;
-    var z = Math.random() * (-400 - 400) + 400;
-    console.log(z);
+    var z = Math.random() * (-studentBoxLimite - studentBoxLimite) + studentBoxLimite;
 
     /*var box = new THREE.Mesh(new THREE.CubeGeometry(width, height, width), material);
     box.position.set(x, y, z);
@@ -142,7 +140,7 @@ function createStudentBox() {
         var action = mixer.clipAction(object.animations[0]);
         action.play();
         object.position.set(x, 0, z);
-        var random = x > widthBoxVideo ? 0.7079608503944332 : 0.25;
+        var random = 0.7079608503944332;
         object.rotation.set(0, random * Math.PI * 2, 0);
         object.height = 2000;
         object.traverse(function(child) {
@@ -171,9 +169,9 @@ function createTeacherBox() {
         side: THREE.DoubleSide,
         alphaTest: 0.5,
     });
-    var box = new THREE.Mesh(new THREE.CubeGeometry(widthBoxVideo, heightBoxVideo, widthBoxVideo), material);
+    var box = new THREE.Mesh(new THREE.CubeGeometry(0, heightBoxVideo, widthBoxVideo), material);
 
-    box.position.set(0, heightBoxVideo / 2, widthBoxVideo / 1.9);
+    box.position.set(-600, heightBoxVideo / 1.8, widthBoxVideo / 1.9);
 
     teacherBoxes.push(box);
     scene.add(box);
@@ -186,8 +184,8 @@ function createScreenBox() {
         side: THREE.DoubleSide,
         alphaTest: 0.5,
     });
-    var box2 = new THREE.Mesh(new THREE.CubeGeometry(widthBoxVideo, heightBoxVideo, widthBoxVideo), material2);
-    box2.position.set(0, heightBoxVideo / 2, -widthBoxVideo / 1.9);
+    var box2 = new THREE.Mesh(new THREE.CubeGeometry(0, heightBoxVideo, widthBoxVideo), material2);
+    box2.position.set(-600, heightBoxVideo / 1.8, -widthBoxVideo / 1.9);
 
     teacherBoxes.push(box2);
     scene.add(box2);
@@ -195,6 +193,7 @@ function createScreenBox() {
 
 function removeTeacherBox() {
     teacherBoxes.forEach((box) => {
+        teacherBoxes.pop();
         scene.remove(box);
     });
     teacherBoxes = [];
@@ -222,9 +221,9 @@ function init(role) {
     video = document.getElementById('video');
     videoScreenShare = document.getElementById('videoScreenShare');
 
-    bodyAngle = 0;
+    bodyAngle = 3.75;
     bodyAxis = new THREE.Vector3(0, 1, 0);
-    bodyPosition = new THREE.Vector3(200, 0, 0);
+    bodyPosition = new THREE.Vector3(100, 50, 0);
     velocity = new THREE.Vector3();
 
     initScene();
@@ -237,13 +236,13 @@ function init(role) {
     }
 
     oculusBridge = new OculusBridge({
-        debug: false,
+        debug: true,
         onOrientationUpdate: bridgeOrientationUpdated,
         onConfigUpdate: bridgeConfigUpdated,
         onConnect: bridgeConnected,
         onDisconnect: bridgeDisconnected,
     });
-    //oculusBridge.connect();
+    oculusBridge.connect();
 
     riftCam = new THREE.StereoEffect(renderer);
     riftCam.setEyeSeparation(-1.8);
@@ -284,7 +283,6 @@ function bridgeOrientationUpdated(quatValues) {
     quat.setFromAxisAngle(bodyAxis, bodyAngle);
 
     // make a quaternion for the current orientation of the Rift
-    console.log("ASASA",quatValues);
     var quatCam = new THREE.Quaternion(quatValues.x, quatValues.y, quatValues.z, quatValues.w);
 
     // multiply the body rotation by the Rift rotation.
@@ -332,7 +330,7 @@ function onKeyUp(event) {
 }
 
 function updateInput(delta) {
-    var step = 25 * delta;
+    var step = 50 * delta;
     var turn_speed = (55 * delta * Math.PI) / 180;
 
     // Forward/backward
