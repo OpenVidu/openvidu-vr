@@ -1,5 +1,5 @@
 # openvidu-vr-room
-OpenVidu vr room is a basic app that allows you to live a virtual reality experience simulating a class room with teacher a students.
+OpenVidu vr room is a basic app that allows you to live a virtual reality experience simulating a class room with teacher and students.
 This app is based on [Instrument company repository](https://github.com/Instrument/oculus-bridge) and it have been developed in JS.
 
 ### Requeriments
