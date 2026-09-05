@@ -1,5 +1,8 @@
 # OpenVidu Virtual Reality
 
+> [!WARNING]
+> **This repository is no longer maintained.**
+
 OpenVidu team has started to inlcude **openvidu** in the world of virtual reality.
 
 
